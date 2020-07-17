@@ -1,0 +1,122 @@
+@startuml
+
+title Wardrobe
+
+
+package com.codecool.wardrobe {
+
+
+    together {
+
+        class Wardrobe {
+
+            - allHangers: List<Hanger>
+            - topsHangers: List<Hanger>
+            - topsBottomsHangers: List<Hanger>
+            - maxHangersAllowed: int
+            - countHangersInWardrobe: int
+            + Wardrobe(int maxHangersAllowed)
+            + put(Hanger hanger): void
+            + getClothes(int id): void
+            + getMaxHangersAllowed(): int
+            + getAllHangers(): List<Hanger>
+
+        }
+
+        abstract class Hanger {
+
+            - type: String
+            - id: int
+            - clothesOnHanger: List<Clothing>
+            - availableSlots: HashMap<String, boolean>
+            + Hanger()
+            + hasSlotFor(Clothing clothing)
+            + takeOff(): void
+            + takeOff(UUID id): void
+            + put(Clothing clothing): void
+            + getType(): String
+            + getId(): int
+
+        }
+
+        enum HangerType {
+            TOPSHANGER
+            TOPSBOTTOMSHANGER
+        }
+    }
+
+    together {
+
+
+        class topsHanger extends Hanger {
+
+            topsHanger(): TopsHanger
+        }
+
+        class topsBottomsHanger extends Hanger {
+
+            topsBottomsHanger(): TopsBottomHanger
+
+        }
+
+        abstract class Clothing {
+
+            - id: int
+            - brandName: String
+            - type: String
+            - description: String
+            - counter: int
+            + Clothing(String brandName, Clothes clothingPiece)
+            + getId(): int
+            + getBrandName(): String
+            + getDescription(): String
+            + getType(): String
+        }
+
+            enum Clothes {
+
+                SHIRT
+                BLOUSE
+                TROUSERS
+                SKIRT
+
+                - clothingType: String
+                - description: String
+
+                + Clothes(String clothes, String description)
+                + getClothingType(): String
+                + getDescription(): String
+            }
+
+    }
+
+    together {
+
+
+            class LowerCothing extends Clothing {
+
+                LowerClothing(String brandName, Clothes clothingPiece): LowerClothing
+            }
+
+            class TopClothing extends Clothing {
+
+                TopClothing(String brandName, Clothes clothingPiece): TopClothing
+
+            }
+
+    }
+
+Wardrobe -[hidden]-> Clothing
+Hanger -* HangerType: "   "
+topsHanger -[hidden]-> topsHanger
+Clothes -* Clothing
+Clothing <- Hanger
+Wardrobe <-> Hanger: "                           "
+Wardrobe -> Clothing
+
+
+}
+
+
+
+@enduml
